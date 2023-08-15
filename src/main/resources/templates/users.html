@@ -61,7 +61,9 @@
     </div>
     <div>
         <h2>Manage Users</h2>
-        <a th:href="@{users/new}">Create new user</a>
+        <a th:href="@{/ShopmeAdmin/users/new}">Create new user</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/ShopmeAdmin/users/export/csv}">Export to CSV</a>
     </div>
 
     <div th:if="${message != null}" class="alert alert-success text-center">
