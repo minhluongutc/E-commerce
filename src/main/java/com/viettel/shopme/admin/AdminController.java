@@ -1,4 +1,4 @@
-package com.viettel.shopme.admin.controller;
+package com.viettel.shopme.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,5 +11,10 @@ public class AdminController {
     @GetMapping
     public String ShopmeAdmin() {
         return "/index";
+    }
+
+    @GetMapping("/login")
+    public String viewLoginPage() {
+        return "/login";
     }
 }
