@@ -39,8 +39,6 @@ public class UserController {
                              @Param("sortField") String sortField,
                              @Param("sortDir") String sortDir,
                              @Param("keyword") String keyword) {
-        System.out.println(sortField);
-        System.out.println(sortDir);
 
         Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
         List<User> listUsers = page.getContent();
@@ -98,10 +96,10 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("message", "The user has been saved successfully!");
 
-        return getRedirectURLtoAfftedUser(user);
+        return getRedirectURLtoAfterUser(user);
     }
 
-    private static String getRedirectURLtoAfftedUser(User user) {
+    private static String getRedirectURLtoAfterUser(User user) {
         String firstPartOfEmail = user.getEmail().split("@")[0];
         return "redirect:/ShopmeAdmin/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
     }
@@ -156,6 +154,14 @@ public class UserController {
     public void exportToCSV(HttpServletResponse response) throws IOException {
         List<User> listUsers = service.listAll();
         UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(listUsers, response);
+    }
+
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        List<User> listUsers = service.listAll();
+
+        UserExcelExporter exporter = new UserExcelExporter();
         exporter.export(listUsers, response);
     }
 }
