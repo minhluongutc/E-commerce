@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                     .loginPage("/ShopmeAdmin/login")
                     .usernameParameter("email")
-                    .permitAll();
+                    .permitAll()
+                .and().logout().permitAll();
     }
 
     @Override
