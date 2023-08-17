@@ -47,7 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/ShopmeAdmin/login")
                     .usernameParameter("email")
                     .permitAll()
-                .and().logout().permitAll();
+                .and().logout().permitAll()
+                .and()
+                    .rememberMe()
+                        .key("lasdjfaSfjdslkaF_1234320348")
+                        .tokenValiditySeconds(7 * 24 * 60 * 60);
     }
 
     @Override
