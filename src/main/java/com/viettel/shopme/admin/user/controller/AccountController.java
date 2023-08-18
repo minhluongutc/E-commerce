@@ -1,7 +1,8 @@
-package com.viettel.shopme.admin.user;
+package com.viettel.shopme.admin.user.controller;
 
 import com.viettel.shopme.admin.FileUploadUtil;
 import com.viettel.shopme.admin.security.ShopmeUserDetails;
+import com.viettel.shopme.admin.user.UserService;
 import com.viettel.shopme.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,7 @@ public class AccountController {
         User user = service.getByEmail(email);
         model.addAttribute("user", user);
 
-        return "/account_form";
+        return "users/account_form";
     }
 
     @PostMapping("/account/update")

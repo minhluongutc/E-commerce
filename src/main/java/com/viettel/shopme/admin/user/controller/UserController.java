@@ -1,6 +1,8 @@
-package com.viettel.shopme.admin.user;
+package com.viettel.shopme.admin.user.controller;
 
 import com.viettel.shopme.admin.FileUploadUtil;
+import com.viettel.shopme.admin.user.UserNotFoundException;
+import com.viettel.shopme.admin.user.UserService;
 import com.viettel.shopme.admin.user.export.UserCsvExporter;
 import com.viettel.shopme.admin.user.export.UserExcelExporter;
 import com.viettel.shopme.admin.user.export.UserPdfExporter;
@@ -64,7 +66,7 @@ public class UserController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
-        return "users";
+        return "users/users";
     }
 
     @GetMapping("/users/new")
@@ -77,7 +79,7 @@ public class UserController {
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create new user");
-        return "user_form";
+        return "users/user_form";
     }
 
     @PostMapping("/users/save")
@@ -119,7 +121,7 @@ public class UserController {
             model.addAttribute("pageTitle", "Edit user (ID: " + id + ")");
             model.addAttribute("listRoles", listRoles);
 
-            return "user_form";
+            return "users/user_form";
         } catch (UserNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message",ex.getMessage());
             return "redirect:/ShopmeAdmin/users";
