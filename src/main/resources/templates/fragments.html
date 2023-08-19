@@ -14,7 +14,7 @@
 <body>
     <th th:fragment="column_link(fieldName, columnLabel)">
         <a class="text-white"
-           th:href="@{'/ShopmeAdmin/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+           th:href="@{'/ShopmeAdmin/' +${entity} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
             [[${columnLabel}]]
         </a>
         <span th:if="${sortField == fieldName}"
@@ -24,7 +24,7 @@
 
     <a th:fragment="page_link(pageNum, label)"
        class="page-link"
-       th:href="@{'/ShopmeAdmin/users/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+       th:href="@{'/ShopmeAdmin/' +${entity} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
         [[${label}]]
     </a>
 
