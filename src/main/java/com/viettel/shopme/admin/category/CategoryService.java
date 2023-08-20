@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -114,6 +115,14 @@ public class CategoryService {
             categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
 
             listSubCategoriesUsedInForm(categoriesUsedInForm, subCategory, newSubLevel);
+        }
+    }
+
+    public Category get(Integer id) throws CategoryNotFoundException {
+        try {
+            return categoryRepo.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new CategoryNotFoundException("Could not find any category with ID " + id);
         }
     }
 }
