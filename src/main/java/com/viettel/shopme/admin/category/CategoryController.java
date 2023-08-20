@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,41 +27,61 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public String listFirstPage(Model model) {
-        return listByPage(1, model, "name", "asc", null);
-    }
-
-    @GetMapping("/categories/page/{pageNum}")
-    public String listByPage(@PathVariable(name = "pageNum") int pageNum,
-                             Model model,
-                             @Param("sortField") String sortField,
-                             @Param("sortDir") String sortDir,
+    public String listAll(Model model,
                              @Param("keyword") String keyword) {
 
-        Page<Category> page = service.listByPage(pageNum, sortField, sortDir, keyword);
-        List<Category> listCategories = page.getContent();
+        List<Category> listCategories = service.listAll();
 
-        long startCount = (pageNum - 1) * CategoryService.CATEGORY_PER_PAGE + 1;
-        long endCount = startCount + CategoryService.CATEGORY_PER_PAGE -1;
-        if (endCount > page.getTotalElements()) {
-            endCount = page.getTotalElements();
-        }
-
-        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
-
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("startCount", startCount);
-        model.addAttribute("endCount", endCount);
-        model.addAttribute("totalItems", page.getTotalElements());
         model.addAttribute("listCategories", listCategories);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", reverseSortDir);
-        model.addAttribute("keyword", keyword);
         model.addAttribute("entity", "categories");
         return "categories/categories";
     }
+
+//    @GetMapping("/categories")
+//    public String listFirstPage(Model model) {
+//        return listByPage(1, model, "name", "asc", null);
+//    }
+//
+//    @GetMapping("/categories/page/{pageNum}")
+//    public String listByPage(@PathVariable(name = "pageNum") int pageNum,
+//                             Model model,
+//                             @Param("sortField") String sortField,
+//                             @Param("sortDir") String sortDir,
+//                             @Param("keyword") String keyword) {
+//
+//        Page<Category> page = service.listByPage(pageNum, sortField, sortDir, keyword);
+//        List<Category> listCategories = page.getContent();
+//        List<Category> listRootCategories = new ArrayList<>();
+//
+//        for (Category rootCategory : listCategories) {
+//            if(rootCategory.getParent() == null) {
+//                listRootCategories.add(rootCategory);
+//            }
+//        }
+//
+//        List<Category> listAll = service.listHierarchicalCategories(listRootCategories);
+//
+//        long startCount = (pageNum - 1) * CategoryService.CATEGORY_PER_PAGE + 1;
+//        long endCount = startCount + CategoryService.CATEGORY_PER_PAGE -1;
+//        if (endCount > page.getTotalElements()) {
+//            endCount = page.getTotalElements();
+//        }
+//
+//        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+//
+//        model.addAttribute("currentPage", pageNum);
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("startCount", startCount);
+//        model.addAttribute("endCount", endCount);
+//        model.addAttribute("totalItems", page.getTotalElements());
+//        model.addAttribute("listCategories", listAll);
+//        model.addAttribute("sortField", sortField);
+//        model.addAttribute("sortDir", sortDir);
+//        model.addAttribute("reverseSortDir", reverseSortDir);
+//        model.addAttribute("keyword", keyword);
+//        model.addAttribute("entity", "categories");
+//        return "categories/categories";
+//    }
 
     @GetMapping("/categories/new")
     public String newCategory(Model model) {

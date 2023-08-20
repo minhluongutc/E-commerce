@@ -49,7 +49,7 @@
         <td>[[${category.id}]]</td>
         <td>
 <!--          <span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-silver"></span>-->
-<!--          <img th:if="${user.photos != null}" th:src="@{${user.getPhotosImagePath}}"/>-->
+          <img th:src="@{${category.imagePath}}" style="width: 100px"/>
         </td>
         <td>[[${category.name}]]</td>
         <td>[[${category.alias}]]</td>
