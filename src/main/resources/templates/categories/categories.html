@@ -38,7 +38,12 @@
       <tr>
         <th th:replace="fragments :: column_link('id', 'ID')"></th>
         <th>Category Image</th>
-        <th th:replace="fragments :: column_link('name', 'Category Name')"></th>
+<!--        <th th:replace="fragments :: column_link('name', 'Category Name')"></th>-->
+        <th>
+          <a class="text-white" th:href="@{'/ShopmeAdmin/categories?sortDir=' + ${reverseSortDir}}">Category Name</a>
+          <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}">
+          </span>
+        </th>
         <th th:replace="fragments :: column_link('alias', 'Alias')"></th>
         <th th:replace="fragments :: column_link('enabled', 'Enabled')"></th>
         <th></th>
