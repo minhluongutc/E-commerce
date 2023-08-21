@@ -27,19 +27,33 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public String listAll(Model model,
+    public String listFirstPage(Model model,
                           @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
+        return listByPage(1, sortDir, model);
 
-        List<Category> listCategories = service.listAll(sortDir);
-        if(sortDir == null || sortDir.isEmpty()) {
+    }
+
+    @GetMapping("/categories/page/{pageNum}")
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum,
+                             @Param("sortDir") String sortDir,
+                             Model model
+                             ) {
+        if (sortDir == null || sortDir.isEmpty()) {
             sortDir = "asc";
         }
 
+        CategoryPageInfo pageInfo = new CategoryPageInfo();
+        List<Category> listCategories = service.listByPage(pageInfo, pageNum, sortDir);
+
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
+        model.addAttribute("totalPages", pageInfo.getTotalPages());
+        model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("currentPage", pageNum);
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("entity", "categories");
         model.addAttribute("sortDir", sortDir);
+        model.addAttribute("sortField", "name");
         model.addAttribute("reverseSortDir", reverseSortDir);
         return "categories/categories";
     }
@@ -94,5 +108,32 @@ public class CategoryController {
 
     }
 
+    @GetMapping("/categories/{id}/enabled/{status}")
+    public String updateEnabledStatus(@PathVariable("id") Integer id,
+                                      @PathVariable("status") boolean enabled,
+                                      RedirectAttributes ra) {
+        service.updateUserEnabledStatus(id, enabled);
 
+        String status = enabled ? "enabled" : "disabled";
+        String message = "the category ID " + id + " has been " + status;
+
+        ra.addFlashAttribute("message", message);
+        return "redirect:/ShopmeAdmin/categories";
+    }
+
+    @GetMapping("/categories/delete/{id}")
+    public String deleteCategory(@PathVariable("id") int id,
+                                 RedirectAttributes ra) {
+        try {
+            service.delete(id);
+
+            String  categoryDir = "./category-images/" + id;
+            FileUploadUtil.removeDir(categoryDir);
+
+            ra.addFlashAttribute("message", "The user ID " + id + " has been deleted successfully");
+        } catch (CategoryNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/ShopmeAdmin/categories";
+    }
 }

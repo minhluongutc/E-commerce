@@ -36,16 +36,15 @@
     <table class="table table-bordered table-striped table-hover table-responsive-xl">
       <thead class="thead-dark">
       <tr>
-        <th th:replace="fragments :: column_link('id', 'ID')"></th>
+        <th>ID</th>
         <th>Category Image</th>
-<!--        <th th:replace="fragments :: column_link('name', 'Category Name')"></th>-->
         <th>
-          <a class="text-white" th:href="@{'/ShopmeAdmin/categories?sortDir=' + ${reverseSortDir}}">Category Name</a>
+          <a class="text-white" th:href="@{'/ShopmeAdmin/categories/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir}}">Category Name</a>
           <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}">
           </span>
         </th>
-        <th th:replace="fragments :: column_link('alias', 'Alias')"></th>
-        <th th:replace="fragments :: column_link('enabled', 'Enabled')"></th>
+        <th>Alias</th>
+        <th>Enabled</th>
         <th></th>
       </tr>
       </thead>
@@ -59,95 +58,33 @@
         <td>[[${category.name}]]</td>
         <td>[[${category.alias}]]</td>
         <td>
-          <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-             th:href="@{'/ShopmeAdmin/categories/' + ${category.id} + '/enabled/false'}"
-             title="Disable this category"></a>
-
-          <a th:if="${category.enabled == false}" class="fas fa-circle fa-2x icon-dark"
-             th:href="@{'/ShopmeAdmin/categories/' + ${category.id} + '/enabled/true'}"
-             title="enable this category"></a>
+          <div th:replace="fragments :: category_status"></div>
         </td>
         <td>
-          <a class="fas fa-edit fa-2x icon-green" th:href="@{'/ShopmeAdmin/categories/edit/' + ${category.id}}"
-             title="edit this category"></a>
-          &nbsp;
-          <a class="fas fa-trash fa-2x icon-dark link-delete"
-             th:href="@{'/ShopmeAdmin/categories/delete/' + ${category.id}}"
-             th:categoryId="${category.id}"
-             title="Delete this category"></a>
+          <div th:replace="fragments :: category_actions"></div>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
 
-  <div class="text-center m-1" th:if="${totalItems > 0}">
-    <span>Showing category # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
-  </div>
-  <div class="text-center m-1" th:unless="${totalItems > 0}">
-    <span>No categories found</span>
-  </div>
+  <div th:replace="fragments :: pagination('categories', 'top-level categories')"></div>
 
-  <div th:if="${totalPages > 1}">
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
-          <a th:replace="fragments :: page_link(1, 'First')"></a>
-        </li>
-        <li th:class="${currentPage > 1 ? 'page-item': 'page-item disabled'}">
-          <a th:replace="fragments :: page_link(${currentPage - 1}, 'Previous')"></a>
-        </li>
-        <li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
-            th:each="i : ${#numbers.sequence(1, totalPages)}">
-          <a th:replace="fragments :: page_link(${i}, ${i})"></a>
-        </li>
-        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
-          <a th:replace="fragments :: page_link(${currentPage + 1}, 'Next')"></a>
-        </li>
-        <li th:class="${currentPage < totalPages ? 'page-item': 'page-item disabled'}">
-          <a th:replace="fragments :: page_link(${totalPages}, 'Last')"></a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-
-  <div class="modal fade text-center" id="confirmModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Delete confirmation</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-
-        <div class="modal-body">
-          <span id="confirmText"></span>
-        </div>
-
-        <div class="modal-footer">
-          <a class="btn btn-success" href="" id="yesButton">Yes</a>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div th:replace="modal_fragments :: confirm_modal"></div>
 
   <div th:replace="fragments :: footer"></div>
 </div>
+<script th:src="@{/js/common_list.js}"></script>
 <script type="text/javascript">
+
+  moduleURL = "[[@{/ShopmeAdmin/categories}]]";
+
   $(document).ready(function() {
     $(".link-delete").on("click", function(e) {
       e.preventDefault();
-      link = $(this);
-      categoryId = link.attr("categoryId");
-      $("#yesButton").attr("href", link.attr("href"));
-      $("#confirmText").text("Are you sure to delete this category ID " + categoryId + "?");
-      $("#confirmModal").modal();
+      showDeleteConfirmModal($(this), 'category');
     });
   });
-
-  function clearFilter() {
-    window.location = "[[@{/ShopmeAdmin/categories}]]"
-  }
 </script>
 </body>
 </html>

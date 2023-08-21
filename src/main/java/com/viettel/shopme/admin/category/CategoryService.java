@@ -14,11 +14,11 @@ import java.util.*;
 @Service
 @Transactional
 public class CategoryService {
-    public static final int CATEGORY_PER_PAGE = 10;
+    public static final int ROOT_CATEGORIES_PER_PAGE = 4;
     @Autowired
     private CategoryRepository categoryRepo;
 
-    public List<Category> listAll(String sortDir) {
+    public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortDir) {
         Sort sort = Sort.by("name");
 
 //        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
@@ -28,7 +28,14 @@ public class CategoryService {
             sort = sort.descending();
         }
 
-        List<Category> rootCategories = categoryRepo.findRootCategories(sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
+
+        Page<Category> pageCategories = categoryRepo.findRootCategories(pageable);
+        List<Category> rootCategories = pageCategories.getContent();
+
+        pageInfo.setTotalElements(pageCategories.getTotalElements());
+        pageInfo.setTotalPages(pageCategories.getTotalPages());
+
         return listHierarchicalCategories(rootCategories, sortDir);
     }
 
@@ -161,5 +168,18 @@ public class CategoryService {
         sortedChildren.addAll(children);
 
         return sortedChildren;
+    }
+
+    public void updateUserEnabledStatus(Integer id, boolean enabled) {
+        categoryRepo.updateEnabledStatus(id, enabled);
+    }
+
+    public void delete(Integer id) throws CategoryNotFoundException {
+        Long countById = categoryRepo.countById(id);
+        if (countById == null || countById == 0) {
+            throw new CategoryNotFoundException("Could not find the category with ID " + id);
+        }
+
+        categoryRepo.deleteById(id);
     }
 }
