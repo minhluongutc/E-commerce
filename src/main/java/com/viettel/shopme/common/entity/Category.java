@@ -22,6 +22,7 @@ public class Category {
     @Column(length = 128, nullable = false)
     private String image;
     private boolean enabled;
+    @Transient
     private boolean hasChildren;
 
     @OneToOne
