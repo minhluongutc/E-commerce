@@ -27,12 +27,8 @@
       <tr>
         <th>ID</th>
         <th>Category Image</th>
-        <th>
-          <a class="text-white" th:href="@{'/ShopmeAdmin/categories/page/' + ${currentPage} + '?sortField=' + ${sortField} + '&sortDir=' + ${reverseSortDir}}">Category Name</a>
-          <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}">
-          </span>
-        </th>
-        <th>Alias</th>
+        <th th:replace="fragments :: column_link('categories', 'name', 'Category Name', 'none')"></th>
+        <th class="hideable-column">Alias</th>
         <th>Enabled</th>
         <th></th>
       </tr>
@@ -46,11 +42,13 @@
         </td>
         <td>[[${category.name}]]</td>
         <td>[[${category.alias}]]</td>
+          <td>
+              <div th:replace="fragments :: status(${category.enabled}, 'category', 'categories/' + ${category.id})"></div>
+          </td>
         <td>
-          <div th:replace="fragments :: category_status"></div>
-        </td>
-        <td>
-          <div th:replace="fragments :: category_actions"></div>
+          <div th:replace="fragments :: edit('category', 'categories/edit/' + ${category.id})"></div>
+            &nbsp;&nbsp;
+            <div th:replace="fragments :: delete('category', ${category.id}, 'categories/delete/' + ${category.id}, ${!category.hasChildren})"></div>
         </td>
       </tr>
       </tbody>

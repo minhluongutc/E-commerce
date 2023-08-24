@@ -19,7 +19,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/ShopmeAdmin/" + dirName + "/**")
                 .addResourceLocations("file:/" + userPhotosPath + "/");
 
-        String categoryImageDirName = "category-images";
+        String categoryImageDirName = "categories-images";
         Path categoryImagesDir = Paths.get(categoryImageDirName);
 
         String categoryImagePath = categoryImagesDir.toFile().getAbsolutePath();

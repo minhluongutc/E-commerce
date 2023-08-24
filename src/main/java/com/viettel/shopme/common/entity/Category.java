@@ -158,6 +158,6 @@ public class Category {
     public String getImagePath() {
         if (this.id == null) return "/images/image-thumbnail.png";
 
-        return "/ShopmeAdmin/category-images/"+this.id+"/"+this.image;
+        return "/ShopmeAdmin/categories-images/"+this.id+"/"+this.image;
     }
 }

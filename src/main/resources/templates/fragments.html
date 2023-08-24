@@ -12,9 +12,9 @@
     <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </head>
 <body>
-    <th th:fragment="column_link(fieldName, columnLabel)">
+    <th th:fragment="column_link(moduleURL, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
         <a class="text-white"
-           th:href="@{'/ShopmeAdmin/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
+           th:href="@{'/ShopmeAdmin/' + ${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">
             [[${columnLabel}]]
         </a>
         <span th:if="${sortField == fieldName}"
@@ -65,25 +65,30 @@
         </div>
     </div>
 
-    <div th:fragment="category_status">
-        <a th:if="${category.enabled == true}" class="fas fa-check-circle fa-2x icon-green"
-           th:href="@{'/ShopmeAdmin/categories/' + ${category.id} + '/enabled/false'}"
-           title="Disable this category"></a>
+    <div th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
+        <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green"
+           th:href="@{'/ShopmeAdmin/'+ ${entityURL} + '/enabled/false'}"
+           th:title="'Disable this' + ${entityName}">
+        </a>
 
-        <a th:if="${category.enabled == false}" class="fas fa-circle fa-2x icon-dark"
-           th:href="@{'/ShopmeAdmin/categories/' + ${category.id} + '/enabled/true'}"
-           title="enable this category"></a>
+        <a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark"
+           th:href="@{'/ShopmeAdmin/'+ ${entityURL} + '/enabled/true'}"
+           th:title="'Enabled this' + ${entityName}">
+
+        </a>
     </div>
 
-    <div th:fragment="category_actions">
-        <a class="fas fa-edit fa-2x icon-green" th:href="@{'/ShopmeAdmin/categories/edit/' + ${category.id}}"
-           title="edit this category"></a>
-        &nbsp;
-        <th:block th:if="${category.hasChildren == false}">
+    <div th:fragment="edit(entityName, editURL)" th:remove="tag">
+        <a class="fas fa-edit fa-2x icon-green" th:href="@{'/ShopmeAdmin/' +  ${editURL}}"
+           th:title="'Edit this ' + ${entityName}"></a>
+    </div>
+
+    <div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+        <th:block th:if="${visible}">
             <a class="fas fa-trash fa-2x icon-dark link-delete"
-               th:href="@{'/ShopmeAdmin/categories/delete/' + ${category.id}}"
-               th:entityId="${category.id}"
-               title="Delete this category"></a>
+               th:href="@{'/ShopmeAdmin/' +  ${deleteURL}}"
+               th:entityId="${entityId}"
+               th:title="'Delete this ' + ${entityName}"></a>
         </th:block>
     </div>
 
