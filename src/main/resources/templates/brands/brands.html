@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Categories  - Shopme Admin')" />
+<body>
+<div class="container-fluid">
+
+    <div th:replace="navigation :: menu"></div>
+
+    <div>
+        <h2>Manage Brand</h2>
+        <a th:href="@{/ShopmeAdmin/brands/new}">Create new category</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/ShopmeAdmin/brands/export/csv}">Export to CSV</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/ShopmeAdmin/brands/export/excel}">Export to Excel</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/ShopmeAdmin/brands/export/pdf}">Export to PDF</a>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
+    <div th:replace="~{fragments :: search_form('/ShopmeAdmin/brands/page/1')}"></div>
+
+    <div>
+        <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Brand ID</th>
+                    <th>Logo</th>
+                    <th>Brand Name</th>
+                    <th>Categories</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="brand : ${brands}">
+                    <td>[[${brand.id}]]</td>
+                    <td>
+
+                    </td>
+                    <td>[[${brand.name}]]</td>
+                    <td>
+                        <th:block th:each="category : ${brand.getCategories()}">
+                                <span class="badge badge-secondary">[[${category.name}]]</span>
+                        </th:block>
+                    </td>
+                    <td>
+                        <div th:replace="fragments :: edit('brand', 'brands/edit/' + ${brand.id})"></div>
+                        &nbsp;&nbsp;
+                        <div th:replace="fragments :: delete('brand', ${brand.id}, 'brands/delete/' + ${brand.id}, true)"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div th:replace="modal_fragments :: confirm_modal"></div>
+        <div th:replace="fragments :: pagination('users', 'users')"></div>
+
+        <div th:replace="fragments :: footer"></div>
+    </div>
+</div>
+    <script th:src="@{/js/common_list.js}"></script>
+    <script type="text/javascript">
+        moduleURL = "[[@{/ShopmeAdmin/brands}]]";
+
+        $(document).ready(function() {
+            $(".link-delete").on("click", function(e) {
+                e.preventDefault();
+                showDeleteConfirmModal($(this), 'brand');
+            });
+        });
+
+        function clearFilter() {
+            window.location = "[[@{/ShopmeAdmin/brands}]]"
+        }
+    </script>
+</body>
+</html>

@@ -1,6 +1,5 @@
 package com.viettel.shopme.common.entity;
 
-import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;

@@ -1,6 +1,6 @@
 package com.viettel.shopme.common.entity;
 
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
+@Data
 @Table(name = "brands")
 public class Brand {
     @Id
@@ -36,38 +37,6 @@ public class Brand {
         this.logo = "brand-logo.png";
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
-    }
-
     @Override
     public String toString() {
         return "Brand{" +
@@ -76,5 +45,12 @@ public class Brand {
                 ", logo='" + logo + '\'' +
                 ", categories=" + categories.stream().map(Category::getName).collect(Collectors.toList()) +
                 '}';
+    }
+
+    @Transient
+    public String getLogoPath() {
+        if (this.id == null) return "/images/image-thumbnail.png";
+
+        return "/ShopmeAdmin/brands-images/"+this.id+"/"+this.logo;
     }
 }
