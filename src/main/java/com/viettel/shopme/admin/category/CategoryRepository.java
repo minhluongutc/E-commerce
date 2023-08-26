@@ -29,4 +29,7 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     public void updateEnabledStatus(Integer id, boolean enabled);
 
     public Long countById(Integer id);
+
+    @Query("select c from Category c order by c.name asc")
+    public List<Category> findAll();
 }

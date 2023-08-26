@@ -31,7 +31,6 @@ public class CategoryController {
     public String listFirstPage(Model model,
                           @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
         return listByPage(1, sortDir, null, model);
-
     }
 
     @GetMapping("/categories/page/{pageNum}")
