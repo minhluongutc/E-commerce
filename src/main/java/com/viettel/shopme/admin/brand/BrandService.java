@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -15,5 +16,24 @@ public class BrandService {
 
     public List<Brand> getAllBrand() {
         return (List<Brand>) repo.findAll();
+    }
+
+    public Brand get(Integer id) throws BrandNotFoundException {
+        try {
+            return repo.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new BrandNotFoundException("Could not found any brand with ID " + id);
+        }
+    }
+
+    public Brand save(Brand brand) {
+        return repo.save(brand);
+    }
+
+    public void delete(Integer id) throws BrandNotFoundException {
+        if(repo.countById(id) == null || repo.countById(id) < 1) {
+            throw new BrandNotFoundException("Could not found the Brand with id: " + id);
+        }
+        repo.deleteById(id);
     }
 }

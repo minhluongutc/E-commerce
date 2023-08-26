@@ -37,6 +37,12 @@ public class Brand {
         this.logo = "brand-logo.png";
     }
 
+    public Brand(String name, String logo, Set<Category> categories) {
+        this.name = name;
+        this.logo = logo;
+        this.categories = categories;
+    }
+
     @Override
     public String toString() {
         return "Brand{" +
@@ -51,6 +57,6 @@ public class Brand {
     public String getLogoPath() {
         if (this.id == null) return "/images/image-thumbnail.png";
 
-        return "/ShopmeAdmin/brands-images/"+this.id+"/"+this.logo;
+        return "/ShopmeAdmin/brands-logos/"+this.id+"/"+this.logo;
     }
 }
