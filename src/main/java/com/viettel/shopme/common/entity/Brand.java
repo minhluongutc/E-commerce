@@ -1,13 +1,13 @@
 package com.viettel.shopme.common.entity;
 
-import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-@Data
 @Table(name = "brands")
 public class Brand {
     @Id
@@ -28,5 +28,53 @@ public class Brand {
     )
     private Set<Category> categories = new  HashSet<>();
 
+    public Brand() {
+    }
 
+    public Brand(String name) {
+        this.name = name;
+        this.logo = "brand-logo.png";
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    @Override
+    public String toString() {
+        return "Brand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", logo='" + logo + '\'' +
+                ", categories=" + categories.stream().map(Category::getName).collect(Collectors.toList()) +
+                '}';
+    }
 }
