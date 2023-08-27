@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -35,5 +36,20 @@ public class BrandService {
             throw new BrandNotFoundException("Could not found the Brand with id: " + id);
         }
         repo.deleteById(id);
+    }
+
+    public String checkUnique(Integer id, String name) {
+        boolean isCreatingNew = (id == null || id == 0);
+        Brand brandByName = repo.findByName(name);
+
+        if(isCreatingNew) {
+            if (brandByName != null) return "Duplicate";
+        } else {
+            if (brandByName != null && !Objects.equals(brandByName.getId(), id)) {
+                return "Duplicate";
+            }
+        }
+
+        return "OK";
     }
 }
