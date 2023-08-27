@@ -11,30 +11,18 @@ import java.nio.file.Paths;
 public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String dirName = "user-photos";
-        Path userPhotosDir = Paths.get(dirName);
+        exportDirectory("user-photos", registry);
+        exportDirectory("categories-images", registry);
+        exportDirectory("brands-logos", registry);
+    }
 
-        String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
+    private void exportDirectory(String pathPattern, ResourceHandlerRegistry registry) {
+        Path path = Paths.get(pathPattern);
+        String absolutePath = path.toFile().getAbsolutePath();
 
-        registry.addResourceHandler("/ShopmeAdmin/" + dirName + "/**")
-                .addResourceLocations("file:/" + userPhotosPath + "/");
+        String logicalPath = pathPattern + "/**";
 
-//        config categories src
-        String categoryImageDirName = "categories-images";
-        Path categoryImagesDir = Paths.get(categoryImageDirName);
-
-        String categoryImagePath = categoryImagesDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/ShopmeAdmin/" + categoryImageDirName + "/**")
-                .addResourceLocations("file:/" + categoryImagePath + "/");
-
-//        config brands src
-        String brandLogoDirName = "brands-logos";
-        Path brandLogoDir = Paths.get(brandLogoDirName);
-
-        String brandLogoPath = brandLogoDir.toFile().getAbsolutePath();
-
-        registry.addResourceHandler("/ShopmeAdmin/" + brandLogoDirName + "/**")
-                .addResourceLocations("file:/" + brandLogoPath + "/");
+        registry.addResourceHandler("/ShopmeAdmin/" + logicalPath)
+                .addResourceLocations("file:/" + absolutePath + "/");
     }
 }
