@@ -44,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ShopmeAdmin/users/**").hasAuthority("Admin")
                 .antMatchers("/ShopmeAdmin/categories/**").hasAnyAuthority("Admin", "Editor")
                 .antMatchers("/ShopmeAdmin/brands/**").hasAnyAuthority("Admin", "Editor")
+                .antMatchers("/ShopmeAdmin/products/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
